@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const SQLiteStore = require('connect-sqlite3')(session);
 const bcrypt = require('bcryptjs');
 const db = require('./database');
 
@@ -21,17 +22,23 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Session config - ONLY ONE
+// Replace your session middleware with:
 app.use(session({
+    store: new SQLiteStore({
+        db: 'sessions.db',
+        dir: './'
+    }),
     secret: process.env.SESSION_SECRET || 'cinedb-secret-key-2024',
     resave: false,
     saveUninitialized: false,
     name: 'cinedb.sid',
+    proxy: true,  // Important for Render
     cookie: { 
         secure: true,
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
-        sameSite: 'none'
+        sameSite: 'none',
+        path: '/'
     }
 }));
 
