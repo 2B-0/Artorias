@@ -1,4 +1,4 @@
-console.log('=== SERVER.JS STARTED ===');
+cconsole.log('=== SERVER.JS STARTED ===');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -7,11 +7,11 @@ const bcrypt = require('bcryptjs');
 const db = require('./database');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Middleware
+// CORS - MUST be first
 app.use(cors({
-    origin: 'https://artorias-2.netlify.app',
+    origin: 'https://artorias-2.netlify.app',  // NO trailing slash
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type'],
@@ -21,27 +21,28 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Session config - ONLY ONE
 app.use(session({
-    secret: 'cinedb-secret-key-2024',
-    resave: true,
-    saveUninitialized: true,
+    secret: process.env.SESSION_SECRET || 'cinedb-secret-key-2024',
+    resave: false,
+    saveUninitialized: false,
     name: 'cinedb.sid',
     cookie: { 
         secure: true,
         httpOnly: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        sameSite: 'none',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: 'none'
     }
 }));
 
 // Debug middleware
 app.use((req, res, next) => {
-    console.log('📍 Route:', req.method, req.path);
-    console.log('🔑 Session ID:', req.sessionID);
-    console.log('👤 User ID:', req.session.userId);
-    console.log('---');
+    console.log(req.method, req.path);
+    console.log('Session:', req.sessionID);
+    console.log('User:', req.session.userId);
     next();
 });
+// Rest of your routes...
 
 app.use('/posters', express.static('posters'));
 app.use(session({
