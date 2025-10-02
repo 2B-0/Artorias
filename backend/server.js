@@ -1,4 +1,4 @@
-cconsole.log('=== SERVER.JS STARTED ===');
+console.log('=== SERVER.JS STARTED ===');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
