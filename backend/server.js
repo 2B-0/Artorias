@@ -101,11 +101,22 @@ app.post('/api/login', (req, res) => {
         req.session.userId = user.id;
         req.session.username = user.username;
         
-        // Return JSON instead of plain text
-        res.json({ 
-            message: 'Login successful!',
-            username: user.username,
-            email: user.email
+        // Save session explicitly
+        req.session.save((err) => {
+            if (err) {
+                console.error('Session save error:', err);
+                return res.status(500).send('Session error');
+            }
+            
+            console.log('Session saved:', req.sessionID);
+            console.log('User ID:', req.session.userId);
+            
+            res.json({ 
+                message: 'Login successful!',
+                username: user.username,
+                email: user.email,
+                sessionId: req.sessionID  // For debugging
+            });
         });
     });
 });
