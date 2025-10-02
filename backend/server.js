@@ -11,7 +11,7 @@ const PORT = 3000;
 
 // Middleware
 app.use(cors({
-    origin: 'http://127.0.0.1:5500',
+    origin: 'https://artorias-2.netlify.app/',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type'],
