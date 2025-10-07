@@ -25,6 +25,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname,'../frontend')));
 
 // Replace your session middleware with:
+const corsOptions = {
+  origin: 'https://artorias-2.netlify.app', // your frontend URL
+  credentials: true, // allows cookies to be sent
+};
+app.use(cors(corsOptions));
+
 app.use(session({
     store: new SQLiteStore({
         db: 'sessions.db',
