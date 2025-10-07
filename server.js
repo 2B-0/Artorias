@@ -1,6 +1,6 @@
 console.log('=== SERVER.JS STARTED ===');
 const express = require('express');
-const path=requie('path');
+const path=require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const session = require('express-session');
